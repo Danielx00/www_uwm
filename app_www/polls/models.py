@@ -54,7 +54,9 @@ class Osoba(models.Model):
     data_dodania = models.DateField(auto_now_add=True)
     druzyna = models.ForeignKey(
         Druzyna,
-        on_delete = models.CASCADE
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
     )
 
     def __str__(self):

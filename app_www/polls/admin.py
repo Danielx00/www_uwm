@@ -14,4 +14,4 @@ class DruzynaAdmin(admin.ModelAdmin):
 
 admin.site.register(Question)
 admin.site.register(Osoba, OsobaAdmin)
-admin.site.register(Druzyna)
+admin.site.register(Druzyna, DruzynaAdmin)
