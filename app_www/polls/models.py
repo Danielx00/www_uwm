@@ -40,6 +40,9 @@ class Osoba(models.Model):
         GRUDZIEN = 12
 
     imie = models.TextField(blank=False, max_length=33)
-    naziwsko = models.TextField(blank=False, max_length=40)
+    nazwisko = models.TextField(blank=False, max_length=40)
     miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=MONTHS.STYCZEN)
     data_dodania = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.imie + ' ' + self.nazwisko
