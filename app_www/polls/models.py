@@ -27,6 +27,9 @@ class Druzyna(models.Model):
     nazwa = models.TextField(max_length=33)
     kraj = models.TextField(max_length=2)
 
+    def __str__(self):
+        return '%s (%s)' % (self.nazwa, self.kraj)
+
 
 
 class Osoba(models.Model):
