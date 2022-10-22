@@ -23,6 +23,12 @@ class Choice(models.Model):
         return self.choice_text
 
 
+class Druzyna(models.Model):
+    nazwa = models.TextField(max_length=33)
+    kraj = models.TextField(max_length=2)
+
+
+
 class Osoba(models.Model):
 
     class Meta:
@@ -46,8 +52,14 @@ class Osoba(models.Model):
     nazwisko = models.TextField(blank=False, max_length=40)
     miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=MONTHS.STYCZEN)
     data_dodania = models.DateField(auto_now_add=True)
+    druzyna = models.ForeignKey(
+        Druzyna,
+        on_delete = models.CASCADE
+    )
 
     def __str__(self):
         return self.imie + ' ' + self.nazwisko
+
+
 
 
