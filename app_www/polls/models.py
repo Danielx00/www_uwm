@@ -25,6 +25,9 @@ class Choice(models.Model):
 
 class Osoba(models.Model):
 
+    class Meta:
+        ordering = ('nazwisko',)
+
     class MONTHS(models.IntegerChoices):
         STYCZEN = 1
         LUTY = 2
@@ -46,3 +49,5 @@ class Osoba(models.Model):
 
     def __str__(self):
         return self.imie + ' ' + self.nazwisko
+
+
