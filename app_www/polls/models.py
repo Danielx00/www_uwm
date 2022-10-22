@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+from datetime import date
 
 class Question(models.Model):
     question_text = models.CharField(max_length=150)
@@ -39,3 +40,4 @@ class Osoba(models.Model):
     imie = models.TextField(blank=False, max_length=33)
     naziwsko = models.TextField(blank=False, max_length=40)
     miesiac_urodzenia = models.CharField(max_length=2, choices=DATA_OPTIONS, default='Styczen')
+    data_dodania = models.DateField(auto_now_add=True)
