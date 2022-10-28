@@ -4,6 +4,7 @@ from django.contrib import admin
 from .models import Question
 from .models import Osoba
 from .models import Druzyna
+from .models import Choice
 
 
 class OsobaAdmin(admin.ModelAdmin):
@@ -15,5 +16,6 @@ class DruzynaAdmin(admin.ModelAdmin):
     list_filter = ['kraj']
 
 admin.site.register(Question)
+admin.site.register(Choice)
 admin.site.register(Osoba, OsobaAdmin)
 admin.site.register(Druzyna, DruzynaAdmin)
