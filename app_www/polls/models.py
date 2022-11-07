@@ -51,7 +51,6 @@ class Osoba(models.Model):
     class Meta:
         ordering = ('nazwisko',)
 
-
     imie = models.TextField(blank=False, max_length=33)
     nazwisko = models.TextField(blank=False, max_length=40)
     miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=MONTHS.STYCZEN)
