@@ -53,7 +53,7 @@ class Osoba(models.Model):
 
     imie = models.TextField(blank=False, max_length=33)
     nazwisko = models.TextField(blank=False, max_length=40)
-    miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=MONTHS.STYCZEN)
+    miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=timezone.now().month)
     data_dodania = models.DateField(auto_now_add=True)
     druzyna = models.ForeignKey(
         Druzyna,
