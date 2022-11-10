@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from .models import Question,Choice,Osoba, Druzyna, MONTHS
+from django.utils import timezone
 
 class QuestionModelSerializer(serializers.ModelSerializer):
     model = Question
     fields = ['id', 'question_text', 'pub_date']
     read_only_fields = ['id', 'pub_date']
-
 
 
 class DruzynaModelSerializer(serializers.Serializer):
@@ -29,6 +29,27 @@ class OsobaModelSerializer(serializers.Serializer):
     nazwisko = serializers.CharField(required=True)
     miesiac_urodzenia = serializers.ChoiceField(choices=MONTHS.choices, default=MONTHS.choices[0][0])
     druzyna = serializers.PrimaryKeyRelatedField(queryset=Druzyna.objects.all(), allow_null=True)
+    data_dodania = serializers.DateTimeField()
+
+    def validate_imie(self, value):
+        if not value.isalpha():
+            raise serializers.ValidationError(
+                "Nazwa musi byc stringiem"
+            )
+        return value
+
+    def validate_nazwisko(self, value):
+        if not value.isalpha():
+            raise serializers.ValidationError(
+                "Nazwa musi byc stringiem"
+            )
+        return value
+
+    def validate_data_dodania(self, value):
+        if value > timezone.now():
+            raise serializers.ValidationError("Niepoprawna data")
+        return value
+
 
     def create(self, validated_data):
         return Osoba.objects.create(**validated_data)
