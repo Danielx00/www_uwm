@@ -31,29 +31,29 @@ class Druzyna(models.Model):
         return '%s (%s)' % (self.nazwa, self.kraj)
 
 
+class MONTHS(models.IntegerChoices):
+
+    STYCZEN = 1
+    LUTY = 2
+    MARZEC = 3
+    KWIECIEN = 4
+    MAJ = 5
+    CZERWIEC = 6
+    LIPIEC = 7
+    SIERPIEN = 8
+    WRZESIEN = 9
+    PAZDZIERNIK = 10
+    LISTOPAD = 11
+    GRUDZIEN = 12
 
 class Osoba(models.Model):
 
     class Meta:
         ordering = ('nazwisko',)
 
-    class MONTHS(models.IntegerChoices):
-        STYCZEN = 1
-        LUTY = 2
-        MARZEC = 3
-        KWIECIEN = 4
-        MAJ = 5
-        CZERWIEC = 6
-        LIPIEC = 7
-        SIERPIEN = 8
-        WRZESIEN = 9
-        PAZDZIERNIK = 10
-        LISTOPAD = 11
-        GRUDZIEN = 12
-
     imie = models.TextField(blank=False, max_length=33)
     nazwisko = models.TextField(blank=False, max_length=40)
-    miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=MONTHS.STYCZEN)
+    miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=timezone.now().month)
     data_dodania = models.DateField(auto_now_add=True)
     druzyna = models.ForeignKey(
         Druzyna,
