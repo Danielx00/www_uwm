@@ -20,7 +20,7 @@ class PersonDetail(APIView):
 
     def get_object(self, pk):
         try:
-            person = Osoba.objects.get(pk=pk)
+            return Osoba.objects.get(pk=pk)
         except Osoba.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -42,34 +42,35 @@ class PersonDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET'])
-def team_list(request):
+class DruzynaList(APIView):
 
-    if request.method == 'GET':
-        teams = Druzyna.objects.all()
-        serializer = DruzynaModelSerializer(teams, many=True)
-        return Response(serializer.data)
+    def get(self, request, format=None):
+            teams = Druzyna.objects.all()
+            serializer = DruzynaModelSerializer(teams, many=True)
+            return Response(serializer.data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def team_detail(request, pk):
-    try:
-        team = Druzyna.objects.get(pk=pk)
-    except Druzyna.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class DruzynaDetail(APIView):
 
-    if request.method == 'GET':
+    def get_object(self,request, pk, format=None):
+        try:
+            return Druzyna.objects.get(pk=pk)
+        except Druzyna.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, pk, format=None):
         team = Druzyna.objects.get(pk=pk)
         serializer = DruzynaModelSerializer(team)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        serializer = DruzynaModelSerializer(team, data=request.data)
+    def put(self, request, pk, format=None):
+        serializer = DruzynaModelSerializer(self.get_object(pk), data=request.data)
         if(serializer.is_valid()):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk, format=None):
+        team = self.get_object(pk)
         team.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
