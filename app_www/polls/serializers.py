@@ -29,7 +29,7 @@ class OsobaModelSerializer(serializers.Serializer):
     nazwisko = serializers.CharField(required=True)
     miesiac_urodzenia = serializers.ChoiceField(choices=MONTHS.choices, default=MONTHS.choices[0][0])
     druzyna = serializers.PrimaryKeyRelatedField(queryset=Druzyna.objects.all(), allow_null=True)
-    data_dodania = serializers.DateTimeField()
+    data_dodania = serializers.DateField()
 
     def validate_imie(self, value):
         if not value.isalpha():
