@@ -1,9 +1,12 @@
 from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Osoba, Druzyna
 from .serializers import OsobaModelSerializer, DruzynaModelSerializer
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -16,8 +19,7 @@ def person_list(request):
         serializer = OsobaModelSerializer(persons, many=True)
         return Response(serializer.data)
 
-
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET'])
 def person_detail(request, pk):
     try:
         person = Osoba.objects.get(pk=pk)
@@ -29,7 +31,17 @@ def person_detail(request, pk):
         serializer = OsobaModelSerializer(person)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+
+@api_view(['PUT', 'DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def person_update_delete(request, pk):
+    try:
+        person = Osoba.objects.get(pk=pk)
+    except Osoba.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
         serializer = OsobaModelSerializer(person, data=request.data)
         if(serializer.is_valid()):
             serializer.save()
