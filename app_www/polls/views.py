@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from .models import Osoba, Druzyna
 from .serializers import OsobaModelSerializer, DruzynaModelSerializer
@@ -10,6 +10,7 @@ from .serializers import OsobaModelSerializer, DruzynaModelSerializer
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+
 
 @api_view(['GET'])
 def person_list(request):
@@ -19,7 +20,9 @@ def person_list(request):
         serializer = OsobaModelSerializer(persons, many=True)
         return Response(serializer.data)
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def person_detail(request, pk):
     try:
         person = Osoba.objects.get(pk=pk)
