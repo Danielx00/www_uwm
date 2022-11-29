@@ -2,6 +2,10 @@ from django.db import models
 import datetime
 from django.utils import timezone
 from datetime import date
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 class Question(models.Model):
     question_text = models.CharField(max_length=150)
@@ -55,6 +59,7 @@ class Osoba(models.Model):
     nazwisko = models.TextField(blank=False, max_length=40)
     miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=timezone.now().month)
     data_dodania = models.DateField(auto_now_add=True)
+    wlasciciel = models.ForeignKey('auth.User', null=True, on_delete=models.CASCADE)
     druzyna = models.ForeignKey(
         Druzyna,
         null=True,
@@ -64,6 +69,11 @@ class Osoba(models.Model):
 
     def __str__(self):
         return self.imie + ' ' + self.nazwisko
+
+    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+    def create_auth_token(sender, instance=None, created=False, **kwargs):
+        if created:
+            Token.objects.create(user=instance)
 
 
 
