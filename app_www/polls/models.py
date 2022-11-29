@@ -60,6 +60,7 @@ class Osoba(models.Model):
     miesiac_urodzenia = models.IntegerField(choices=MONTHS.choices, default=timezone.now().month)
     data_dodania = models.DateField(auto_now_add=True)
     wlasciciel = models.ForeignKey('auth.User', null=True, on_delete=models.CASCADE)
+    can_view_other_persons = models.BooleanField(default=False)
     druzyna = models.ForeignKey(
         Druzyna,
         null=True,

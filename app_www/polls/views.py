@@ -6,10 +6,26 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from .models import Osoba, Druzyna
 from .serializers import OsobaModelSerializer, DruzynaModelSerializer
+from django.core.exceptions import PermissionDenied
 
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+
+
+@api_view(['GET'])
+def person_view(request, pk):
+    if not request.user.has_perm('polls.view_osoba'):
+        raise PermissionDenied()
+    try:
+        osoba = Osoba.objects.get(pk=pk)
+        if not osoba.can_view_other_persons and osoba.wlasciciel != request.user:
+            return HttpResponse(f"This user is named {osoba.imie}")
+        else:
+            serializer = OsobaModelSerializer(osoba)
+            return Response(serializer.data)
+    except Osoba.DoesNotExist:
+        return HttpResponse(f"The database does not contain a user with the ID {pk}.")
 
 
 @api_view(['GET'])
